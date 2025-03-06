@@ -1,28 +1,28 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
-import Home from "./Pages/Home";
-import Register from "./Pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import Buy from "./Pages/Buy";
-import Rent from "./Pages/Rent";
-import Sell from "./Pages/Sell";
-import Contact from "./Pages/Contact";
-import About from "./components/About";
-import Careers from "./components/Careers";
-import Terms from "./components/TnC";
-import PrivacyPolicy from "./components/Policy";
-import FAQ from "./components/FAQ";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
+import Home from "./Pages/Home.jsx";
+import Register from "./Pages/Register.jsx";
+import ForgotPassword from "./Pages/ForgotPassword.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
+import Buy from "./Pages/Buy.jsx";
+import Rent from "./Pages/Rent.jsx";
+import Sell from "./Pages/Sell.jsx";
+import Contact from "./Pages/Contact.jsx";
+import About from "./components/About.jsx";
+import Careers from "./components/Careers.jsx";
+import Terms from "./components/TnC.jsx";
+import PrivacyPolicy from "./components/Policy.jsx";
+import FAQ from "./components/FAQ.jsx";
 import { Box } from "@mui/material";
-import Login from './Pages/Login';
-import Details from './Pages/Details';
-import Wishlist from './Pages/Wishlist';
-import PropertyDetails from "./pages/PropertyDetails";
-import Payment from "./Pages/Payment";
-import Admin from "./Pages/Admin";
-import SuccessPage from "./Pages/SuccessPage";
+import Login from './Pages/Login.jsx';
+import Details from './Pages/Details.jsx';
+import Wishlist from './Pages/Wishlist.jsx';
+import PropertyDetails from "./pages/PropertyDetails.jsx";
+import Payment from "./Pages/Payment.jsx";
+import Admin from "./Pages/Admin.jsx";
+import SuccessPage from "./Pages/SuccessPage.jsx";
 import { useEffect } from "react";
 
 function App() {
@@ -67,7 +67,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/forgot-password" element={<ForgotPassword></ForgotPassword>} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
             <Route path="/buy" element={<Buy />} />
             <Route path="/rent" element={<Rent />} />
