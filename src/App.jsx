@@ -43,7 +43,7 @@ function App() {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
     localStorage.removeItem("role");
-  
+
   };
 
   return (
@@ -84,9 +84,7 @@ function App() {
             <Route path="/payment" element={<Payment />} />
             <Route path="/success" element={<SuccessPage></SuccessPage>} />
             <Route path="/admin" element={<Admin onLogout={handleLogout} />} />
-            
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:token" element={<ResetPassword />} />
+
           </Routes>
         </Box>
 
