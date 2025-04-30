@@ -37,7 +37,7 @@ const PropertyDetails = () => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("User not authenticated. Please log in.");
 
-        const propertyResponse = await fetch(`http://localhost:9090/api/properties/${id}`, {
+        const propertyResponse = await fetch(`https://demo-deployment-latest-o749.onrender.com/api/properties/${id}`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -78,7 +78,7 @@ const PropertyDetails = () => {
         propertyId: id,
       };
 
-      const response = await fetch("http://localhost:9090/ratings", {
+      const response = await fetch("https://demo-deployment-latest-o749.onrender.com/ratings", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

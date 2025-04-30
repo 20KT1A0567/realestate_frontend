@@ -53,7 +53,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const API_URL = "http://localhost:9090";
+const API_URL = "https://demo-deployment-latest-o749.onrender.com";
 
 const AdminDashboard = ({ onLogout }) => {
   const theme = useTheme();

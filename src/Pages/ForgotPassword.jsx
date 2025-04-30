@@ -26,7 +26,7 @@ const ForgotPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:9090/forgot-password", {
+      const response = await fetch("https://demo-deployment-latest-o749.onrender.com/forgot-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
