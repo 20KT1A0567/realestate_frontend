@@ -15,7 +15,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate(); // For redirecting after successful registration
+  const navigate = useNavigate(); 
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,12 +57,9 @@ const Register = () => {
         body: JSON.stringify(formData),
       });
 
-      // Handle unauthorized error
       if (response.status === 401) {
         throw new Error("Unauthorized: Check API authentication settings.");
       }
-
-      // Prevent parsing empty response
       const data = response.ok ? await response.json().catch(() => ({})) : {};
 
       if (!response.ok) {

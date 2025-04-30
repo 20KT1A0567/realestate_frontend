@@ -9,7 +9,7 @@ const TnC = () => {
     <Container maxWidth="md">
       <Box 
         sx={{ 
-          pt: 12, // Prevents collision with the header
+          pt: 12, 
           pb: 8 
         }}
       >
@@ -40,8 +40,6 @@ const TnC = () => {
             <li>VenkatEstate reserves the right to modify, update, or terminate services without prior notice.</li>
             <li>Users must not misuse the website or engage in fraudulent activities.</li>
           </Box>
-
-          {/* Left-aligned Contact Us text without underline or color change */}
           <Typography variant="body1" paragraph sx={{ fontSize: "1.1rem", lineHeight: 1.8 }}>
             For a complete list of terms, please{" "}
             <Box 

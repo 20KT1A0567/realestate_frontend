@@ -68,7 +68,7 @@ const Login = ({ onLogin }) => {
       };
       console.log(user.role)
       navigate(roleRedirects[user.role] || "/");
-      onLogin(user); // Notify the parent component about the login
+      onLogin(user);
     }
 
     setLoading(false);

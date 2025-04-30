@@ -1,18 +1,31 @@
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, TextField, Typography, Box, Paper, CircularProgress } from "@mui/material";
+import {
+  Button,
+  TextField,
+  Typography,
+  Box,
+  Paper,
+  CircularProgress,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); 
+  const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md")); 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      // Send a request to the backend to initiate password reset
       const response = await fetch("http://localhost:9090/forgot-password", {
         method: "POST",
         headers: {
@@ -36,11 +49,28 @@ const ForgotPassword = () => {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-      <Paper elevation={3} sx={{ p: 4, width: 400 }}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      sx={{
+        px: 2, 
+        backgroundColor: "#f5f5f5",
+      }}
+    >
+      <Paper
+        elevation={3}
+        sx={{
+          p: isMobile ? 3 : 4,
+          width: isMobile ? "100%" : isTablet ? 400 : 450,
+          maxWidth: "100%",
+        }}
+      >
         <Typography variant="h5" align="center" gutterBottom>
           Forgot Password
         </Typography>
+
         <form onSubmit={handleSubmit}>
           <TextField
             fullWidth
@@ -62,11 +92,17 @@ const ForgotPassword = () => {
             {loading ? <CircularProgress size={24} /> : "Send Reset Link"}
           </Button>
         </form>
+
         {message && (
-          <Typography color={message.includes("sent") ? "success" : "error"} align="center" sx={{ mt: 2 }}>
+          <Typography
+            color={message.includes("sent") ? "green" : "error"}
+            align="center"
+            sx={{ mt: 2 }}
+          >
             {message}
           </Typography>
         )}
+
         <Typography align="center" sx={{ mt: 2 }}>
           <Link to="/login">Back to Login</Link>
         </Typography>

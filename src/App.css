@@ -1,4 +1,4 @@
-/* Ensure full-screen layout */
+
 html, body, #root {
   height: 100%;
   width: 100%;
@@ -21,20 +21,14 @@ html, body, #root {
   align-items: center;
   width: 100%;
 }
-
-/* Ensure the header and footer take full width */
 .header, .footer {
   width: 100%;
 }
-
-/* Adjust root container */
 #root {
   max-width: 100%;
   padding: 0;
   text-align: center;
 }
-
-/* Center the search bar */
 .search-bar {
   display: flex;
   justify-content: center;

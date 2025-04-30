@@ -6,7 +6,7 @@ const About = () => {
     <Container maxWidth="md">
       <Box 
         sx={{ 
-          pt: 12, // Adjusting to prevent header overlap
+          pt: 12, 
           pb: 6, 
           textAlign: "center" 
         }}

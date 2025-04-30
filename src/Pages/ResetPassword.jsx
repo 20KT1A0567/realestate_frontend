@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Button, TextField, Typography, Box, Paper, CircularProgress } from "@mui/material";
 
 const ResetPassword = () => {
-  const { token } = useParams(); // Get the reset token from the URL
+  const { token } = useParams(); 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,6 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      // Send a request to the backend to reset the password
       const response = await fetch("http://localhost:9090/reset-password", {
         method: "POST",
         headers: {

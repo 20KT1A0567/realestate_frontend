@@ -7,7 +7,7 @@ const FAQ = () => {
     <Container maxWidth="md">
       <Box 
         sx={{ 
-          pt: 12, // Prevents header collision
+          pt: 12, 
           pb: 8 
         }}
       >

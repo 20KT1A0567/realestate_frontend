@@ -7,6 +7,6 @@ import "./index.css";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <CssBaseline />
-    <App />  {/* Renders App with routing and layout */}
+    <App />  
   </StrictMode>
 );

@@ -6,7 +6,7 @@ const Policy = () => {
     <Container maxWidth="md">
       <Box 
         sx={{ 
-          pt: 12, // Prevents collision with the header
+          pt: 12, 
           pb: 8 
         }}
       >

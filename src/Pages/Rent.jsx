@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
@@ -163,8 +164,8 @@ const Rent = () => {
 
   return (
     <Container sx={{ mt: 8, mb: 4 }}>
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4}>
-        <Typography variant="h4" fontWeight="bold">
+      <Box display="flex" justifyContent="space-between" alignItems="center" mb={4} flexDirection={{ xs: "column", sm: "row" }}>
+        <Typography variant="h4" fontWeight="bold" sx={{ mb: { xs: 2, sm: 0 } }}>
           Available Properties for Rent
         </Typography>
         <Button
@@ -186,7 +187,7 @@ const Rent = () => {
             value={searchParams.location}
             onChange={handleSearchChange}
             placeholder="Enter location"
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, mb: 2 }}
           />
           <TextField
             label="Price"
@@ -194,7 +195,7 @@ const Rent = () => {
             name="price"
             value={searchParams.price}
             onChange={handleSearchChange}
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, mb: 2 }}
           />
           <TextField
             label="Min Size (sq ft)"
@@ -202,7 +203,7 @@ const Rent = () => {
             name="size"
             value={searchParams.size}
             onChange={handleSearchChange}
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, mb: 2 }}
           />
           <TextField
             label="Category"
@@ -210,7 +211,7 @@ const Rent = () => {
             value={searchParams.category}
             onChange={handleSearchChange}
             placeholder="Apartment, Villa, etc."
-            sx={{ flex: 1 }}
+            sx={{ flex: 1, mb: 2 }}
           />
         </Box>
       </Paper>

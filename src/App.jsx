@@ -27,7 +27,7 @@ import { useEffect } from "react";
 
 function App() {
   useEffect(() => {
-    localStorage.removeItem("token"); // Remove token when app loads
+    localStorage.removeItem("token");
   }, []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState(null);

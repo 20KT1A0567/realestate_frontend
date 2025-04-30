@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -20,15 +21,15 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 const PropertyDetails = () => {
-  const { id } = useParams(); // Property ID from the URL
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const [property, setProperty] = useState(null);
   const [rating, setRating] = useState(4.3); 
-  const [userRating, setUserRating] = useState(0); // State to store the user's rating input
+  const [userRating, setUserRating] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
-  const [coordinates, setCoordinates] = useState(null); // State to store map coordinates
+  const [coordinates, setCoordinates] = useState(null); 
 
   useEffect(() => {
     const fetchPropertyDetails = async () => {
@@ -36,7 +37,6 @@ const PropertyDetails = () => {
         const token = localStorage.getItem("token");
         if (!token) throw new Error("User not authenticated. Please log in.");
 
-        // Fetch property details
         const propertyResponse = await fetch(`http://localhost:9090/api/properties/${id}`, {
           method: "GET",
           headers: { Authorization: `Bearer ${token}` },
@@ -47,7 +47,6 @@ const PropertyDetails = () => {
         const propertyData = await propertyResponse.json();
         setProperty(propertyData);
 
-        // Fetch coordinates for the map
         const geocodeUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(propertyData.location)}&format=json&limit=1`;
         const geocodeResponse = await fetch(geocodeUrl);
         const geocodeData = await geocodeResponse.json();
@@ -92,7 +91,7 @@ const PropertyDetails = () => {
 
       const data = await response.json();
       setSuccessMessage("Rating submitted successfully!");
-      setUserRating(0); // Reset the user's rating input
+      setUserRating(0);
     } catch (error) {
       console.error("Error submitting rating:", error);
       setError(error.message);
@@ -100,14 +99,13 @@ const PropertyDetails = () => {
   };
 
   const handlePayment = () => {
-    // Redirect to Payment.jsx with necessary data
     navigate("/payment", {
       state: {
         propertyId: id,
         userId: property.seller.id,
         amount: property.discountedPrice || property.price,
-        price:property.price,
-        discount:property.discountPercent
+        price: property.price,
+        discount: property.discountPercent
       },
     });
   };
@@ -117,20 +115,17 @@ const PropertyDetails = () => {
   if (!property) return <Typography>No property details available.</Typography>;
 
   return (
-    <Container sx={{ py: 4, mt: 8, mb: 4 }}> {/* Added margin to prevent header collision */}
+    <Container sx={{ py: 4, mt: 8, mb: 4 }}> 
       <Grid container spacing={4}>
-        {/* Image Section */}
         <Grid item xs={12} md={6}>
           <CardMedia
             component="img"
-            height="400"
+            height="100%"
             image={property.imageUrls?.[0] || "default-image-url.jpg"}
             alt={property.propertyTitle}
             sx={{ objectFit: "cover", borderRadius: 2 }}
           />
         </Grid>
-
-        {/* Property Details Section */}
         <Grid item xs={12} md={6}>
           <CardContent>
             <Typography variant="h4" gutterBottom>
@@ -141,20 +136,17 @@ const PropertyDetails = () => {
             </Typography>
             <Divider sx={{ my: 2 }} />
 
-            {/* Ratings Section */}
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
               <Rating
                 name="property-rating"
-                value={rating} // Use the hardcoded fake average rating
-                precision={0.5} // Allow half-star ratings
-                readOnly // Make the rating read-only
+                value={rating} 
+                precision={0.5} 
+                readOnly 
               />
               <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
                 ({rating.toFixed(1)}/5)
               </Typography>
             </Box>
-
-            {/* User Rating Input */}
             <Box sx={{ mb: 2 }}>
               <Typography variant="h6" gutterBottom>
                 Rate this property:
@@ -175,8 +167,6 @@ const PropertyDetails = () => {
                 Submit Rating
               </Button>
             </Box>
-
-            {/* Success or Error Message */}
             {successMessage && (
               <Alert severity="success" sx={{ mb: 2 }}>
                 {successMessage}
@@ -194,9 +184,6 @@ const PropertyDetails = () => {
                 <Typography variant="h6" color="primary">
                   Price: ₹{property.price.toLocaleString("en-IN")}
                 </Typography>
-                {/* <Typography variant="body2" color="text.secondary">
-                  Discounted Price: ₹{property.discountedPrice.toLocaleString("en-IN")}
-                </Typography> */}
                 <Chip
                   label={`${property.discountPercent}% OFF`}
                   color="success"
@@ -246,8 +233,6 @@ const PropertyDetails = () => {
                 <strong>Email:</strong> {property.seller.email}
               </Typography>
             </Box>
-
-            {/* Buy Now Button */}
             <Box sx={{ mt: 3 }}>
               <Button
                 variant="contained"
@@ -264,7 +249,7 @@ const PropertyDetails = () => {
       </Grid>
 
       {/* Map Section */}
-      <Grid item xs={12} sx={{ mt: 4, height: "400px" }}>
+      <Grid item xs={12} sx={{ mt: 4, height: "300px" }}>
         {coordinates ? (
           <MapContainer center={[coordinates.lat, coordinates.lon]} zoom={13} style={{ width: "100%", height: "100%" }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
