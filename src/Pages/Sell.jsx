@@ -74,7 +74,7 @@ const Sell = () => {
     }
 
     try {
-      const response = await fetch(`https://demo-deployment-latest-o749.onrender.com/api/properties/${propertyId}`, {
+      const response = await fetch(`https://demo-deployment-latest-1-ykqs.onrender.com/api/properties/${propertyId}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -121,7 +121,7 @@ const Sell = () => {
     }
 
     try {
-      const response = await fetch(`https://demo-deployment-latest-o749.onrender.com/api/properties/delete/${propertyId}`, {
+      const response = await fetch(`/api/properties/delete/${propertyId}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -167,8 +167,8 @@ const Sell = () => {
 
     try {
       const url = isEditing
-        ? `https://demo-deployment-latest-o749.onrender.com/api/properties/update/${propertyId}`
-        : "https://demo-deployment-latest-o749.onrender.com/api/properties/add";
+        ? `https://demo-deployment-latest-1-ykqs.onrender.com/api/properties/update/${propertyId}`
+        : "https://demo-deployment-latest-1-ykqs.onrender.com/api/properties/add";
       const method = isEditing ? "PUT" : "POST";
 
       const response = await fetch(url, {
