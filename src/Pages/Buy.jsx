@@ -58,7 +58,7 @@ const Buy = () => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("User not authenticated. Please log in.");
 
-      const response = await fetch("https://demo-deployment-latest-1-ykqs.onrender.com/api/properties/type/BUY", {
+      const response = await fetch("https://demo-deployment-latest-2-fsis.onrender.com/api/properties/type/BUY", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
