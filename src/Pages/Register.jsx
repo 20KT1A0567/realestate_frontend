@@ -49,7 +49,7 @@ const Register = () => {
     if (!isFormValid) return;
 
     try {
-      const response = await fetch("https://demo-deployment-latest-2-fsis.onrender.com/auth/register", {
+      const response = await fetch("https://demo-deployment-latest-3.onrender.com/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
