@@ -4,11 +4,7 @@ import { Button, TextField, Typography, Box, Paper, CircularProgress } from "@mu
 
 const loginUser = async (email, password) => {
   try {
-<<<<<<< HEAD
     const response = await fetch("https://demo-deployment-2rqn.onrender.com/auth/login", {
-=======
-    const response = await fetch("http://localhost:9090/auth/login", {
->>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -68,10 +64,6 @@ const Login = ({ onLogin }) => {
         ADMIN: "/admin",
         BUYER: "/buy",
         SELLER: "/sell",
-<<<<<<< HEAD
-=======
-        AGENT: "/sell",
->>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
       };
       console.log(user.role)
       navigate(roleRedirects[user.role] || "/");

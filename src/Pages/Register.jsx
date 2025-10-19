@@ -49,11 +49,7 @@ const Register = () => {
     if (!isFormValid) return;
 
     try {
-<<<<<<< HEAD
       const response = await fetch("https://demo-deployment-2rqn.onrender.com/auth/register", {
-=======
-      const response = await fetch("http://localhost:9090/auth/register", {
->>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -132,11 +128,7 @@ const Register = () => {
           >
             <MenuItem value="BUYER">Buyer</MenuItem>
             <MenuItem value="SELLER">Seller</MenuItem>
-<<<<<<< HEAD
             <MenuItem value="ADMIN">Admin</MenuItem>
-=======
-            <MenuItem value="AGENT">Agent</MenuItem>
->>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
           </TextField>
           <Button
             fullWidth
