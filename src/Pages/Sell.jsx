@@ -74,7 +74,11 @@ const Sell = () => {
     }
 
     try {
+<<<<<<< HEAD
       const response = await fetch(`https://demo-deployment-2rqn.onrender.com/api/properties/${propertyId}`, {
+=======
+      const response = await fetch(`http://localhost:9090/api/properties/${propertyId}`, {
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -167,8 +171,13 @@ const Sell = () => {
 
     try {
       const url = isEditing
+<<<<<<< HEAD
         ? `https://demo-deployment-2rqn.onrender.com/api/properties/update/${propertyId}`
         : "https://demo-deployment-2rqn.onrender.com/api/properties/add";
+=======
+        ? `http://localhost:9090/api/properties/update/${propertyId}`
+        : "http://localhost:9090/api/properties/add";
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
       const method = isEditing ? "PUT" : "POST";
 
       const response = await fetch(url, {

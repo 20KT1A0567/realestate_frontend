@@ -54,7 +54,11 @@ const Payment = () => {
       console.log(token)
       if (!token) throw new Error("User not authenticated. Please log in.");
 
+<<<<<<< HEAD
       const response = await fetch("https://demo-deployment-2rqn.onrender.com/api/payment/create-order", {
+=======
+      const response = await fetch("http://localhost:9090/api/payment/create-order", {
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -77,7 +81,11 @@ const Payment = () => {
         order_id: order.id,
         handler: async function (response) {
           try {
+<<<<<<< HEAD
             const callbackResponse = await fetch("https://demo-deployment-2rqn.onrender.com/api/payment/callback", {
+=======
+            const callbackResponse = await fetch("http://localhost:9090/api/payment/callback", {
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
               method: "POST",
               headers: {
                 Authorization: `Bearer ${token}`,

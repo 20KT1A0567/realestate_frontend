@@ -53,7 +53,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+<<<<<<< HEAD
 const API_URL = "https://demo-deployment-2rqn.onrender.com";
+=======
+const API_URL = "http://localhost:9090";
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
 
 const AdminDashboard = ({ onLogout }) => {
   const theme = useTheme();
@@ -422,7 +426,11 @@ const AdminDashboard = ({ onLogout }) => {
                         <TableCell><b>Created At</b></TableCell>
                       </>
                     )}
+<<<<<<< HEAD
                    
+=======
+                    <TableCell><b>Actions</b></TableCell>
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -538,7 +546,11 @@ const AdminDashboard = ({ onLogout }) => {
                       {!isMobile && <TableCell><b>Location</b></TableCell>}
                       <TableCell><b>Price</b></TableCell>
                       {!isMobile && <TableCell><b>Type</b></TableCell>}
+<<<<<<< HEAD
                     
+=======
+                      <TableCell><b>Actions</b></TableCell>
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -572,7 +584,20 @@ const AdminDashboard = ({ onLogout }) => {
                             >
                               Delete
                             </Button>
+<<<<<<< HEAD
                             
+=======
+                            <Select
+                              value={property.status || "ACTIVE"}
+                              onChange={(e) => handleUpdateStatus(property.id, e.target.value)}
+                              size="small"
+                              sx={{ minWidth: 120 }}
+                            >
+                              <MenuItem value="ACTIVE">Active</MenuItem>
+                              <MenuItem value="INACTIVE">Inactive</MenuItem>
+                              <MenuItem value="SOLD">Sold</MenuItem>
+                            </Select>
+>>>>>>> 085b89d50b00f188f34f273b50c69688b178f1d5
                           </Box>
                         </TableCell>
                       </TableRow>
