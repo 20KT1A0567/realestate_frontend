@@ -21,7 +21,7 @@ const ResetPassword = () => {
     setLoading(true);
 
     try {
-      const response = await fetch("https://demo-deployment-1-ilu1.onrender.com/reset-password", {
+      const response = await fetch("https://demo-deployment10.onrender.com/reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
