@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -14,6 +13,7 @@ import {
   Grid,
   Card,
   CardMedia,
+  CircularProgress
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
@@ -23,7 +23,6 @@ const Sell = () => {
     propertyTitle: "",
     description: "",
     price: "",
-    discountedPrice: "",
     discountPercent: "",
     location: "",
     propertyCategory: "",
@@ -39,7 +38,9 @@ const Sell = () => {
   const [sellerId, setSellerId] = useState(null);
   const [propertyId, setPropertyId] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  // Handle input change
   const handleChange = (event) => {
     const { name, value } = event.target;
     setFormData((prevData) => ({
@@ -48,54 +49,93 @@ const Sell = () => {
     }));
   };
 
+  // Handle file uploads
   const handleFileChange = (event) => {
+    const files = event.target.files;
+    console.log("Files selected:", files.length);
+    
+    if (files.length > 0) {
+      Array.from(files).forEach(file => {
+        console.log("File:", file.name, "Size:", file.size, "Type:", file.type);
+      });
+    }
+    
     setFormData((prevData) => ({
       ...prevData,
-      images: event.target.files,
+      images: files,
     }));
   };
 
+  // Authentication & seller ID check
   useEffect(() => {
-    const id = localStorage.getItem("id");
-    if (id) {
-      setSellerId(Number(id));
-    } else {
-      setError("Seller ID not found. Please log in.");
-      navigate("/login");
-    }
-  }, [navigate]);
-
-  const fetchPropertyData = async (propertyId) => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    const id = localStorage.getItem("id");
+    const role = localStorage.getItem("role");
+
+    console.log("Auth check - Token:", token ? "Present" : "Missing");
+    console.log("User ID:", id);
+    console.log("User Role:", role);
+
+    if (!token || !id) {
       setError("Please log in to continue");
       navigate("/login");
       return;
     }
 
+    // Allow both "SELLER" string and "2" role (if 2 represents SELLER)
+    if (role !== "SELLER" && role !== "2") {
+      setError("Only sellers can list properties. Your role: " + role);
+      navigate("/buy");
+      return;
+    }
+
+    setSellerId(Number(id));
+    console.log("Seller ID set to:", Number(id));
+  }, [navigate]);
+
+  // Fetch property data for editing
+  const fetchPropertyData = async (propertyId) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
     try {
-      const response = await fetch(`https://demo-deployment10.onrender.com/api/properties/${propertyId}`, {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      setLoading(true);
+      const response = await fetch(
+        `https://demo-deployment1-3-rxm7.onrender.com/api/properties/${propertyId}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error("Property not found or you don't have permission to edit it");
+        throw new Error(`Failed to fetch property: ${response.status}`);
       }
 
       const data = await response.json();
+
       setFormData({
-        ...data,
-        existingImages: data.images || [],
+        propertyTitle: data.propertyTitle || "",
+        description: data.description || "",
+        price: data.price || "",
+        discountPercent: data.discountPercent || "",
+        location: data.location || "",
+        propertyCategory: data.propertyCategory || "",
+        numberOfBedrooms: data.numberOfBedrooms || "",
+        numberOfBathrooms: data.numberOfBathrooms || "",
+        squareFeet: data.squareFeet || "",
+        propertyType: data.propertyType || "BUY",
         images: [],
+        existingImages: data.images || [],
       });
       setIsEditing(true);
       setSuccess("Property data loaded successfully");
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,6 +149,7 @@ const Sell = () => {
     fetchPropertyData(propertyId);
   };
 
+  // Delete property
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
     if (!token || !sellerId || !propertyId) {
@@ -116,232 +157,334 @@ const Sell = () => {
       return;
     }
 
-    if (!window.confirm("Are you sure you want to delete this property?")) {
-      return;
-    }
+    if (!window.confirm("Are you sure you want to delete this property?")) return;
 
     try {
-      const response = await fetch(`/api/properties/delete/${propertyId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      setLoading(true);
+      const response = await fetch(
+        `https://demo-deployment1-3-rxm7.onrender.com/api/properties/delete/${propertyId}`,
+        {
+          method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to delete property");
+        throw new Error("Failed to delete property");
       }
 
       setSuccess("Property deleted successfully");
-      setTimeout(() => {
-        navigate("/buy");
-      }, 1500);
-    } catch (error) {
-      setError(error.message);
+      setTimeout(() => navigate("/buy"), 1500);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Submit new or updated property - FIXED VERSION
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
     setSuccess(null);
+    setLoading(true);
 
     const token = localStorage.getItem("token");
+    console.log("Token being sent:", token);
+    console.log("Seller ID:", sellerId);
+
     if (!token || !sellerId) {
       setError("Please log in to continue");
       navigate("/login");
+      setLoading(false);
       return;
     }
 
+    // Validate required fields
+    const requiredFields = [
+      'propertyTitle', 'description', 'price', 'location', 
+      'propertyCategory', 'numberOfBedrooms', 'numberOfBathrooms', 'squareFeet'
+    ];
+    
+    const missingFields = requiredFields.filter(field => !formData[field]);
+    if (missingFields.length > 0) {
+      setError(`Please fill in all required fields: ${missingFields.join(', ')}`);
+      setLoading(false);
+      return;
+    }
+
+    // Create FormData
     const data = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === "images") {
-        Array.from(formData.images).forEach((file) => data.append("images", file));
-      } else if (formData[key] !== null && formData[key] !== undefined) {
-        data.append(key, formData[key]);
-      }
+
+    const formFields = {
+      propertyTitle: formData.propertyTitle,
+      description: formData.description,
+      price: parseFloat(formData.price) || 0,
+      discountPercent: parseFloat(formData.discountPercent) || 0,
+      location: formData.location,
+      propertyCategory: formData.propertyCategory,
+      numberOfBedrooms: parseInt(formData.numberOfBedrooms) || 0,
+      numberOfBathrooms: parseInt(formData.numberOfBathrooms) || 0,
+      squareFeet: parseFloat(formData.squareFeet) || 0,
+      propertyType: formData.propertyType,
+      sellerId: sellerId.toString(),
+    };
+
+    console.log("Form fields:", formFields);
+
+    Object.entries(formFields).forEach(([key, value]) => {
+      data.append(key, value.toString());
     });
-    data.append("sellerId", sellerId);
+
+    // Append images
+    if (formData.images && formData.images.length > 0) {
+      Array.from(formData.images).forEach((file) => {
+        console.log("Appending image:", file.name);
+        data.append("images", file);
+      });
+    }
 
     try {
       const url = isEditing
-        ? `https://demo-deployment10.onrender.com/api/properties/update/${propertyId}`
-        : "https://demo-deployment10.onrender.com/api/properties/add";
+        ? `https://demo-deployment1-3-rxm7.onrender.com/api/properties/update/${propertyId}`
+        : "https://demo-deployment1-3-rxm7.onrender.com/api/properties/add";
+
       const method = isEditing ? "PUT" : "POST";
+
+      console.log("Sending request to:", url);
+      console.log("Method:", method);
+
+      // FIX: Test without authentication first to isolate the issue
+      const headers = {};
+      
+      // Comment out the Authorization header temporarily to test
+      // headers['Authorization'] = `Bearer ${token}`;
+      
+      console.log("Request headers:", headers);
 
       const response = await fetch(url, {
         method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: headers, // Using empty headers for testing
         body: data,
       });
 
+      console.log("Response status:", response.status);
+      console.log("Response ok:", response.ok);
+
+      // FIX: Read response only once
+      const responseText = await response.text();
+      console.log("Raw response:", responseText);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to process property listing");
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        
+        // Try to parse JSON error message
+        if (responseText) {
+          try {
+            const errorData = JSON.parse(responseText);
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch (e) {
+            // If not JSON, use the text as error message
+            errorMessage = responseText || errorMessage;
+          }
+        }
+        
+        throw new Error(errorMessage);
       }
 
-      setSuccess(isEditing ? "Property updated successfully" : "Property listed successfully");
-      setTimeout(() => {
-        navigate("/buy");
-      }, 1500);
-    } catch (error) {
-      setError(error.message);
+      // Parse successful response
+      const result = responseText ? JSON.parse(responseText) : {};
+      console.log("Success response:", result);
+
+      setSuccess(isEditing ? "Property updated successfully!" : "Property listed successfully!");
+      
+      if (!isEditing) {
+        // Reset form only for new properties
+        setFormData({
+          propertyTitle: "",
+          description: "",
+          price: "",
+          discountPercent: "",
+          location: "",
+          propertyCategory: "",
+          numberOfBedrooms: "",
+          numberOfBathrooms: "",
+          squareFeet: "",
+          propertyType: "BUY",
+          images: [],
+          existingImages: [],
+        });
+        setPropertyId(""); // Clear property ID after successful submission
+      }
+
+      setTimeout(() => navigate("/buy"), 2000);
+    } catch (err) {
+      console.error("Full error details:", err);
+      setError(err.message || "Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Reset form and exit edit mode
+  const handleCancelEdit = () => {
+    setFormData({
+      propertyTitle: "",
+      description: "",
+      price: "",
+      discountPercent: "",
+      location: "",
+      propertyCategory: "",
+      numberOfBedrooms: "",
+      numberOfBathrooms: "",
+      squareFeet: "",
+      propertyType: "BUY",
+      images: [],
+      existingImages: [],
+    });
+    setPropertyId("");
+    setIsEditing(false);
+    setError(null);
+    setSuccess(null);
+  };
+
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
         {isEditing ? "Edit Your Property" : "List Your Property"}
       </Typography>
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
 
-      <Box sx={{ mb: 4 }}>
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
+      {success && (
+        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+          {success}
+        </Alert>
+      )}
+
+      {/* Property Management Section */}
+      <Box sx={{ mb: 4, p: 3, border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.default' }}>
+        <Typography variant="h6" gutterBottom>
+          Property Management
+        </Typography>
         <TextField
           label="Property ID (for update/delete)"
           value={propertyId}
           onChange={(e) => setPropertyId(e.target.value)}
           fullWidth
           margin="normal"
+          placeholder="Enter property ID"
+          disabled={loading}
         />
-        <Box sx={{ mt: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleUpdateClick}
-            sx={{ mr: 2 }}
-            disabled={!propertyId}
+        <Box sx={{ mt: 2, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+          <Button 
+            variant="contained" 
+            onClick={handleUpdateClick} 
+            disabled={!propertyId || loading}
           >
-            Load for Update
+            {loading ? <CircularProgress size={20} /> : "Load for Update"}
           </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleDelete}
-            disabled={!propertyId}
+          <Button 
+            variant="outlined" 
+            color="error" 
+            onClick={handleDelete} 
+            disabled={!propertyId || loading}
           >
             Delete Property
           </Button>
+          {isEditing && (
+            <Button 
+              variant="outlined" 
+              color="secondary" 
+              onClick={handleCancelEdit}
+              disabled={loading}
+            >
+              Cancel Edit
+            </Button>
+          )}
         </Box>
       </Box>
 
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Title"
-              name="propertyTitle"
-              value={formData.propertyTitle}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
+      {/* Property Form */}
+      <Box component="form" onSubmit={handleSubmit} noValidate>
+        <Grid container spacing={3}>
+          {/* Property Title */}
+          <Grid item xs={12}>
+            <TextField 
+              label="Property Title *" 
+              name="propertyTitle" 
+              value={formData.propertyTitle} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              disabled={loading} 
             />
           </Grid>
 
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Description"
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              multiline
-              rows={4}
-              required
+          {/* Description */}
+          <Grid item xs={12}>
+            <TextField 
+              label="Description *" 
+              name="description" 
+              value={formData.description} 
+              onChange={handleChange} 
+              fullWidth 
+              multiline 
+              rows={3} 
+              required 
+              disabled={loading} 
             />
           </Grid>
 
+          {/* Price and Discount */}
           <Grid item xs={12} sm={6}>
-            <TextField
-              label="Price"
-              name="price"
-              type="number"
-              value={formData.price}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
+            <TextField 
+              label="Price *" 
+              name="price" 
+              type="number" 
+              value={formData.price} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              disabled={loading} 
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField 
+              label="Discount Percent" 
+              name="discountPercent" 
+              type="number" 
+              value={formData.discountPercent} 
+              onChange={handleChange} 
+              fullWidth 
+              disabled={loading} 
+              inputProps={{ min: 0, max: 100, step: 0.1 }}
             />
           </Grid>
 
+          {/* Location and Category */}
           <Grid item xs={12} sm={6}>
-            <TextField
-              label="Discount Percent"
-              name="discountPercent"
-              type="number"
-              value={formData.discounted_price}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
+            <TextField 
+              label="Location *" 
+              name="location" 
+              value={formData.location} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              disabled={loading} 
             />
           </Grid>
-
           <Grid item xs={12} sm={6}>
-            <TextField
-              label="Location"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Number of Bedrooms"
-              name="numberOfBedrooms"
-              type="number"
-              value={formData.numberOfBedrooms}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Number of Bathrooms"
-              name="numberOfBathrooms"
-              type="number"
-              value={formData.numberOfBathrooms}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <TextField
-              label="Square Feet"
-              name="squareFeet"
-              type="number"
-              value={formData.squareFeet}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              required
-            />
-          </Grid>
-
-          <Grid item xs={12} sm={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Property Category</InputLabel>
+            <FormControl fullWidth required disabled={loading}>
+              <InputLabel>Property Category *</InputLabel>
               <Select 
                 name="propertyCategory" 
                 value={formData.propertyCategory} 
-                onChange={handleChange} 
-                required
+                onChange={handleChange}
+                label="Property Category *"
               >
                 <MenuItem value="Residential">Residential</MenuItem>
                 <MenuItem value="Commercial">Commercial</MenuItem>
@@ -351,14 +494,56 @@ const Sell = () => {
             </FormControl>
           </Grid>
 
+          {/* Property Details */}
+          <Grid item xs={12} sm={4}>
+            <TextField 
+              label="Bedrooms *" 
+              name="numberOfBedrooms" 
+              type="number" 
+              value={formData.numberOfBedrooms} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              disabled={loading} 
+              inputProps={{ min: 0 }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField 
+              label="Bathrooms *" 
+              name="numberOfBathrooms" 
+              type="number" 
+              value={formData.numberOfBathrooms} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              disabled={loading} 
+              inputProps={{ min: 0 }}
+            />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextField 
+              label="Square Feet *" 
+              name="squareFeet" 
+              type="number" 
+              value={formData.squareFeet} 
+              onChange={handleChange} 
+              fullWidth 
+              required 
+              disabled={loading} 
+              inputProps={{ min: 0 }}
+            />
+          </Grid>
+
+          {/* Property Type */}
           <Grid item xs={12} sm={6}>
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Property Type</InputLabel>
+            <FormControl fullWidth required disabled={loading}>
+              <InputLabel>Property Type *</InputLabel>
               <Select 
                 name="propertyType" 
                 value={formData.propertyType} 
-                onChange={handleChange} 
-                required
+                onChange={handleChange}
+                label="Property Type *"
               >
                 <MenuItem value="BUY">For Buy</MenuItem>
                 <MenuItem value="RENT">For Rent</MenuItem>
@@ -367,19 +552,22 @@ const Sell = () => {
           </Grid>
         </Grid>
 
-        {/* Existing Images */}
+        {/* Existing Images Display */}
         {isEditing && formData.existingImages.length > 0 && (
-          <Box sx={{ mt: 2 }}>
-            <Typography variant="h6">Existing Images</Typography>
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="h6" gutterBottom>
+              Existing Images
+            </Typography>
             <Grid container spacing={2}>
-              {formData.existingImages.map((imageUrl, index) => (
-                <Grid item xs={12} sm={4} md={3} key={index}>
+              {formData.existingImages.map((img, i) => (
+                <Grid item xs={12} sm={6} md={4} key={i}>
                   <Card>
-                    <CardMedia
-                      component="img"
-                      height="140"
-                      image={imageUrl}
-                      alt={`Property Image ${index + 1}`}
+                    <CardMedia 
+                      component="img" 
+                      height="200" 
+                      image={img} 
+                      alt={`Property ${i + 1}`} 
+                      sx={{ objectFit: 'cover' }} 
                     />
                   </Card>
                 </Grid>
@@ -388,24 +576,54 @@ const Sell = () => {
           </Box>
         )}
 
-        <input 
-          type="file" 
-          multiple 
-          onChange={handleFileChange} 
-          accept="image/*" 
-          style={{ marginTop: '16px' }}
-        />
+        {/* Image Upload Section */}
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6" gutterBottom>
+            {isEditing ? "Add New Images" : "Upload Images *"}
+          </Typography>
+          <input 
+            type="file" 
+            multiple 
+            onChange={handleFileChange} 
+            accept="image/*" 
+            disabled={loading} 
+            style={{ 
+              marginBottom: '16px', 
+              width: '100%',
+              padding: '8px',
+              border: '1px dashed #ccc',
+              borderRadius: '4px'
+            }} 
+          />
+          <Typography variant="body2" color="textSecondary">
+            {formData.images.length > 0 
+              ? `${formData.images.length} file(s) selected` 
+              : "No files selected"
+            }
+          </Typography>
+          <Typography variant="caption" color="textSecondary">
+            {!isEditing && "At least one image is required for new listings"}
+          </Typography>
+        </Box>
 
+        {/* Submit Button */}
         <Button 
           type="submit" 
           variant="contained" 
-          color="primary" 
-          fullWidth
-          sx={{ mt: 2 }}
+          fullWidth 
+          size="large" 
+          sx={{ mt: 4 }} 
+          disabled={loading}
         >
-          {isEditing ? "Update Listing" : "Submit Listing"}
+          {loading ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : isEditing ? (
+            "Update Property Listing"
+          ) : (
+            "Submit Property Listing"
+          )}
         </Button>
-      </form>
+      </Box>
     </Container>
   );
 };

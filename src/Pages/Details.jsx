@@ -38,7 +38,7 @@ const Details = () => {
 
     const fetchPropertyDetails = async () => {
       try {
-        const response = await fetch(`https://demo-deployment10.onrender.com/property/${propertyId}`, {
+        const response = await fetch(`https://demo-deployment1-3-rxm7.onrender.com/property/${propertyId}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
