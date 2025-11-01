@@ -67,10 +67,11 @@ const Payment = () => {
       if (!response.ok) throw new Error("Failed to create payment order.");
       const order = await response.json();
       const finalAmount = Math.round((price - (price * discount) / 100));
+      console.log("final amount" + finalAmount);
 
       const options = {
         key: "rzp_test_fNhXlhgX3Ai8dA", 
-        amount: finalAmount * 100,
+        amount: finalAmount,
         currency: order.currency,
         name: "Real Estate Platform",
         description: `Payment for property ID: ${propertyId}`,

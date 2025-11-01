@@ -33,6 +33,7 @@ const Sell = () => {
     images: [],
     existingImages: [],
   });
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [sellerId, setSellerId] = useState(null);
@@ -167,7 +168,7 @@ const Sell = () => {
     }
   };
 
-  // Submit new or updated property
+  // ✅ Corrected handleSubmit
   const handleSubmit = async (event) => {
     event.preventDefault();
     setError(null);
@@ -200,8 +201,11 @@ const Sell = () => {
       sellerId: sellerId.toString(),
     };
 
+    // Append all fields without forcing .toString()
     Object.entries(formFields).forEach(([key, value]) => {
-      data.append(key, value.toString());
+      if (value !== undefined && value !== null) {
+        data.append(key, value);
+      }
     });
 
     // Append images
@@ -230,6 +234,7 @@ const Sell = () => {
       }
 
       setSuccess(isEditing ? "Property updated successfully!" : "Property listed successfully!");
+
       if (!isEditing) {
         setFormData({
           propertyTitle: "",
@@ -261,10 +266,28 @@ const Sell = () => {
         {isEditing ? "Edit Your Property" : "List Your Property"}
       </Typography>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>{success}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+          {error}
+        </Alert>
+      )}
+      {success && (
+        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+          {success}
+        </Alert>
+      )}
 
-      <Box sx={{ mb: 4, p: 3, border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.default' }}>
+      {/* Property ID section for update/delete */}
+      <Box
+        sx={{
+          mb: 4,
+          p: 3,
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 2,
+          bgcolor: "background.default",
+        }}
+      >
         <Typography variant="h6">Property Management</Typography>
         <TextField
           label="Property ID (for update/delete)"
@@ -275,27 +298,100 @@ const Sell = () => {
           placeholder="Enter property ID"
           disabled={loading}
         />
-        <Box sx={{ mt: 2, display: 'flex', gap: 2 }}>
-          <Button variant="contained" color="primary" onClick={handleUpdateClick} disabled={!propertyId || loading}>
+        <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleUpdateClick}
+            disabled={!propertyId || loading}
+          >
             {loading ? <CircularProgress size={20} /> : "Load for Update"}
           </Button>
-          <Button variant="outlined" color="error" onClick={handleDelete} disabled={!propertyId || loading}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={handleDelete}
+            disabled={!propertyId || loading}
+          >
             Delete Property
           </Button>
         </Box>
       </Box>
 
+      {/* Form */}
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Grid container spacing={3}>
-          <Grid item xs={12}><TextField label="Property Title *" name="propertyTitle" value={formData.propertyTitle} onChange={handleChange} fullWidth required disabled={loading} /></Grid>
-          <Grid item xs={12}><TextField label="Description *" name="description" value={formData.description} onChange={handleChange} fullWidth multiline rows={3} required disabled={loading} /></Grid>
-          <Grid item xs={12} sm={6}><TextField label="Price *" name="price" type="number" value={formData.price} onChange={handleChange} fullWidth required disabled={loading} /></Grid>
-          <Grid item xs={12} sm={6}><TextField label="Discount Percent" name="discountPercent" type="number" value={formData.discountPercent} onChange={handleChange} fullWidth disabled={loading} /></Grid>
-          <Grid item xs={12} sm={6}><TextField label="Location *" name="location" value={formData.location} onChange={handleChange} fullWidth required disabled={loading} /></Grid>
+          <Grid item xs={12}>
+            <TextField
+              label="Property Title *"
+              name="propertyTitle"
+              value={formData.propertyTitle}
+              onChange={handleChange}
+              fullWidth
+              required
+              disabled={loading}
+            />
+          </Grid>
+
+          <Grid item xs={12}>
+            <TextField
+              label="Description *"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              fullWidth
+              multiline
+              rows={3}
+              required
+              disabled={loading}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Price *"
+              name="price"
+              type="number"
+              value={formData.price}
+              onChange={handleChange}
+              fullWidth
+              required
+              disabled={loading}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Discount Percent"
+              name="discountPercent"
+              type="number"
+              value={formData.discountPercent}
+              onChange={handleChange}
+              fullWidth
+              disabled={loading}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <TextField
+              label="Location *"
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
+              fullWidth
+              required
+              disabled={loading}
+            />
+          </Grid>
+
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth required disabled={loading}>
               <InputLabel>Property Category *</InputLabel>
-              <Select name="propertyCategory" value={formData.propertyCategory} onChange={handleChange}>
+              <Select
+                name="propertyCategory"
+                value={formData.propertyCategory}
+                onChange={handleChange}
+              >
                 <MenuItem value="Residential">Residential</MenuItem>
                 <MenuItem value="Commercial">Commercial</MenuItem>
                 <MenuItem value="Industrial">Industrial</MenuItem>
@@ -303,13 +399,54 @@ const Sell = () => {
               </Select>
             </FormControl>
           </Grid>
-          <Grid item xs={12} sm={4}><TextField label="Bedrooms *" name="numberOfBedrooms" type="number" value={formData.numberOfBedrooms} onChange={handleChange} fullWidth required disabled={loading} /></Grid>
-          <Grid item xs={12} sm={4}><TextField label="Bathrooms *" name="numberOfBathrooms" type="number" value={formData.numberOfBathrooms} onChange={handleChange} fullWidth required disabled={loading} /></Grid>
-          <Grid item xs={12} sm={4}><TextField label="Square Feet *" name="squareFeet" type="number" value={formData.squareFeet} onChange={handleChange} fullWidth required disabled={loading} /></Grid>
+
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Bedrooms *"
+              name="numberOfBedrooms"
+              type="number"
+              value={formData.numberOfBedrooms}
+              onChange={handleChange}
+              fullWidth
+              required
+              disabled={loading}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Bathrooms *"
+              name="numberOfBathrooms"
+              type="number"
+              value={formData.numberOfBathrooms}
+              onChange={handleChange}
+              fullWidth
+              required
+              disabled={loading}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={4}>
+            <TextField
+              label="Square Feet *"
+              name="squareFeet"
+              type="number"
+              value={formData.squareFeet}
+              onChange={handleChange}
+              fullWidth
+              required
+              disabled={loading}
+            />
+          </Grid>
+
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth required disabled={loading}>
               <InputLabel>Property Type *</InputLabel>
-              <Select name="propertyType" value={formData.propertyType} onChange={handleChange}>
+              <Select
+                name="propertyType"
+                value={formData.propertyType}
+                onChange={handleChange}
+              >
                 <MenuItem value="BUY">For Buy</MenuItem>
                 <MenuItem value="RENT">For Rent</MenuItem>
               </Select>
@@ -317,27 +454,64 @@ const Sell = () => {
           </Grid>
         </Grid>
 
+        {/* Existing Images */}
         {isEditing && formData.existingImages.length > 0 && (
           <Box sx={{ mt: 4 }}>
             <Typography variant="h6">Existing Images</Typography>
             <Grid container spacing={2}>
               {formData.existingImages.map((img, i) => (
                 <Grid item xs={12} sm={6} md={4} key={i}>
-                  <Card><CardMedia component="img" height="200" image={img} alt={`Property ${i + 1}`} sx={{ objectFit: 'cover' }} /></Card>
+                  <Card>
+                    <CardMedia
+                      component="img"
+                      height="200"
+                      image={img}
+                      alt={`Property ${i + 1}`}
+                      sx={{ objectFit: "cover" }}
+                    />
+                  </Card>
                 </Grid>
               ))}
             </Grid>
           </Box>
         )}
 
+        {/* Image Upload */}
         <Box sx={{ mt: 4 }}>
-          <Typography variant="h6">{isEditing ? "Add New Images" : "Upload Images *"}</Typography>
-          <input type="file" multiple onChange={handleFileChange} accept="image/*" disabled={loading} style={{ marginBottom: '16px', width: '100%' }} />
-          <Typography variant="body2">{formData.images.length > 0 ? `${formData.images.length} file(s) selected` : "No files selected"}</Typography>
+          <Typography variant="h6">
+            {isEditing ? "Add New Images" : "Upload Images *"}
+          </Typography>
+          <input
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            accept="image/*"
+            disabled={loading}
+            style={{ marginBottom: "16px", width: "100%" }}
+          />
+          <Typography variant="body2">
+            {formData.images.length > 0
+              ? `${formData.images.length} file(s) selected`
+              : "No files selected"}
+          </Typography>
         </Box>
 
-        <Button type="submit" variant="contained" color="primary" fullWidth size="large" sx={{ mt: 4 }} disabled={loading}>
-          {loading ? <CircularProgress size={20} color="inherit" /> : isEditing ? "Update Property Listing" : "Submit Property Listing"}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          size="large"
+          sx={{ mt: 4 }}
+          disabled={loading}
+        >
+          {loading ? (
+            <CircularProgress size={20} color="inherit" />
+          ) : isEditing ? (
+            "Update Property Listing"
+          ) : (
+            "Submit Property Listing"
+          )}
         </Button>
       </Box>
     </Container>
