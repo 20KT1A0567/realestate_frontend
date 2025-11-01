@@ -36,7 +36,7 @@ const FAQ = () => {
             },
             {
               question: "How can I contact customer support?",
-              answer: "You can reach us via our toll-free number 1-800-EXCEL-ESTATE or email us at venkataraodama660@gmail.com."
+              answer: "You can reach us via our toll-free number 1-800-VENKAT-ESTATE or email us at venkataraodama660@gmail.com."
             },
             {
               question: "Do you provide virtual property tours?",

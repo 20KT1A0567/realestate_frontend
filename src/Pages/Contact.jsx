@@ -97,7 +97,7 @@ const Contact = () => {
             }}
           >
             <PhoneIcon color="primary" />
-            <strong>Toll-Free No:</strong> 1-800-EXCEL-ESTATE
+            <strong>Toll-Free No:</strong> 1-800-VENKAT-ESTATE
           </Typography>
 
           <Typography
