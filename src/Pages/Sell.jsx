@@ -86,7 +86,7 @@
 //     try {
 //       setLoading(true);
 //       const response = await fetch(
-//         `https://demo-deployment3-2.onrender.com/api/properties/${propertyId}`,
+//         `https://demo-deployment3-3.onrender.com/api/properties/${propertyId}`,
 //         {
 //           method: "GET",
 //           headers: {
@@ -147,7 +147,7 @@
 //     try {
 //       setLoading(true);
 //       const response = await fetch(
-//         `https://demo-deployment3-2.onrender.com/api/properties/delete/${propertyId}`,
+//         `https://demo-deployment3-3.onrender.com/api/properties/delete/${propertyId}`,
 //         {
 //           method: "DELETE",
 //           headers: { Authorization: `Bearer ${token}` },
@@ -211,8 +211,8 @@
 
 //     try {
 //       const url = isEditing
-//         ? `https://demo-deployment3-2.onrender.com/api/properties/update/${propertyId}`
-//         : "https://demo-deployment3-2.onrender.com/api/properties/add";
+//         ? `https://demo-deployment3-3.onrender.com/api/properties/update/${propertyId}`
+//         : "https://demo-deployment3-3.onrender.com/api/properties/add";
 
 //       const method = isEditing ? "PUT" : "POST";
 
@@ -444,7 +444,7 @@ const Sell = () => {
       console.log("Fetching property data for ID:", propertyId);
 
       const response = await fetch(
-        `https://demo-deployment3-2.onrender.com/api/properties/${propertyId}`,
+        `https://demo-deployment3-3.onrender.com/api/properties/${propertyId}`,
         {
           method: "GET",
           headers: {
@@ -532,7 +532,7 @@ const Sell = () => {
       console.log("Deleting property:", propertyId);
 
       const response = await fetch(
-        `https://demo-deployment3-2.onrender.com/api/properties/delete/${propertyId}`,
+        `https://demo-deployment3-3.onrender.com/api/properties/delete/${propertyId}`,
         {
           method: "DELETE",
           headers: {
@@ -645,8 +645,8 @@ const Sell = () => {
 
     try {
       const url = isEditing
-        ? `https://demo-deployment3-2.onrender.com/api/properties/update/${propertyId}`
-        : "https://demo-deployment3-2.onrender.com/api/properties/add";
+        ? `https://demo-deployment3-3.onrender.com/api/properties/update/${propertyId}`
+        : "https://demo-deployment3-3.onrender.com/api/properties/add";
 
       const method = isEditing ? "PUT" : "POST";
 

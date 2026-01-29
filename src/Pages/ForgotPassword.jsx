@@ -22,7 +22,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await fetch(
-        `https://demo-deployment3-2.onrender.com/auth/forgot-password?email=${email}`,
+        `https://demo-deployment3-3.onrender.com/auth/forgot-password?email=${email}`,
         { method: "POST" }
       );
 
