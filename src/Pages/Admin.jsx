@@ -53,7 +53,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const API_URL = "https://demo-deployment1-3-rxm7.onrender.com";
+const API_URL = "https://demo-deployment3-86e1.onrender.com";
 
 const AdminDashboard = ({ onLogout }) => {
   const theme = useTheme();
@@ -175,7 +175,7 @@ const AdminDashboard = ({ onLogout }) => {
         { role: editedRoles[id] },
         { headers: { "Content-Type": "application/json" } }
       );
-      setUsers(users.map((user) => 
+      setUsers(users.map((user) =>
         user.id === id ? { ...user, role: editedRoles[id] } : user
       ));
       setEditedRoles((prev) => {
@@ -212,7 +212,7 @@ const AdminDashboard = ({ onLogout }) => {
         { status: newStatus },
         { headers: { "Content-Type": "application/json" } }
       );
-      setProperties(properties.map((property) => 
+      setProperties(properties.map((property) =>
         property.id === id ? { ...property, status: newStatus } : property
       ));
     } catch (error) {
@@ -260,10 +260,10 @@ const AdminDashboard = ({ onLogout }) => {
 
   const handleAddTodo = () => {
     if (!newTodo.trim() || !todoDate) return;
-    const newTodoItem = { 
-      id: todos.length + 1, 
-      task: newTodo, 
-      date: todoDate 
+    const newTodoItem = {
+      id: todos.length + 1,
+      task: newTodo,
+      date: todoDate
     };
     setTodos([...todos, newTodoItem]);
     setNewTodo("");
@@ -278,17 +278,17 @@ const AdminDashboard = ({ onLogout }) => {
       acc[property.propertyType] = (acc[property.propertyType] || 0) + 1;
       return acc;
     }, {});
-    return Object.keys(typeCounts).map((type) => ({ 
-      name: type, 
-      value: typeCounts[type] 
+    return Object.keys(typeCounts).map((type) => ({
+      name: type,
+      value: typeCounts[type]
     }));
   };
 
   const getPriceFluctuationData = () => {
     const sortedProperties = [...properties].sort((a, b) => a.price - b.price);
-    return sortedProperties.map((property) => ({ 
-      name: property.propertyTitle, 
-      price: property.price 
+    return sortedProperties.map((property) => ({
+      name: property.propertyTitle,
+      price: property.price
     }));
   };
 
@@ -329,18 +329,18 @@ const AdminDashboard = ({ onLogout }) => {
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgcolor: "#f5f5f5" }}>
-      <AppBar 
-        position="fixed" 
-        sx={{ 
-          zIndex: (theme) => theme.zIndex.drawer + 1, 
-          bgcolor: theme.palette.primary.main 
+      <AppBar
+        position="fixed"
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          bgcolor: theme.palette.primary.main
         }}
       >
         <Toolbar>
-          <IconButton 
-            color="inherit" 
-            edge="start" 
-            onClick={() => setSidebarOpen(!sidebarOpen)} 
+          <IconButton
+            color="inherit"
+            edge="start"
+            onClick={() => setSidebarOpen(!sidebarOpen)}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
@@ -354,21 +354,21 @@ const AdminDashboard = ({ onLogout }) => {
         variant={isMobile ? "temporary" : "persistent"}
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        sx={{ 
-          width: 240, 
-          flexShrink: 0, 
-          [`& .MuiDrawer-paper`]: { 
-            width: 240, 
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: {
+            width: 240,
             boxSizing: "border-box",
             top: theme.mixins.toolbar.minHeight,
             height: `calc(100% - ${theme.mixins.toolbar.minHeight}px)`,
-          } 
+          }
         }}
       >
         <List>
           {["users", "properties", "messages", "todos"].map((tab) => (
-            <ListItem 
-              button 
+            <ListItem
+              button
               key={tab}
               onClick={() => {
                 setActiveTab(tab);
@@ -376,26 +376,26 @@ const AdminDashboard = ({ onLogout }) => {
               }}
               selected={activeTab === tab}
             >
-              <ListItemText 
-                primary={tab.charAt(0).toUpperCase() + tab.slice(1)} 
+              <ListItemText
+                primary={tab.charAt(0).toUpperCase() + tab.slice(1)}
                 primaryTypographyProps={{ fontWeight: activeTab === tab ? "bold" : "normal" }}
               />
             </ListItem>
           ))}
           <Divider sx={{ my: 1 }} />
-          <ListItem 
-            button 
-            onClick={handleLogout} 
+          <ListItem
+            button
+            onClick={handleLogout}
             sx={{ color: theme.palette.error.main }}
           >
             <ListItemText primary="Logout" />
           </ListItem>
         </List>
       </Drawer>
-      <Box 
-        component="main" 
-        sx={{ 
-          flexGrow: 1, 
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
           p: isMobile ? 1 : 3,
           width: `calc(100% - ${sidebarOpen ? 240 : 0}px)`,
           transition: theme.transitions.create('width', {
@@ -422,7 +422,7 @@ const AdminDashboard = ({ onLogout }) => {
                         <TableCell><b>Created At</b></TableCell>
                       </>
                     )}
-                   
+
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -479,13 +479,13 @@ const AdminDashboard = ({ onLogout }) => {
                   </Typography>
                   <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
-                      <Pie 
-                        data={getPropertyTypeDistribution()} 
-                        cx="50%" 
-                        cy="50%" 
-                        outerRadius={80} 
-                        fill="#8884d8" 
-                        dataKey="value" 
+                      <Pie
+                        data={getPropertyTypeDistribution()}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
                         label
                       >
                         {getPropertyTypeDistribution().map((entry, index) => (
@@ -504,8 +504,8 @@ const AdminDashboard = ({ onLogout }) => {
                     Price Fluctuation
                   </Typography>
                   <ResponsiveContainer width="100%" height={300}>
-                    <LineChart 
-                      data={getPriceFluctuationData()} 
+                    <LineChart
+                      data={getPriceFluctuationData()}
                       margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" />
@@ -513,11 +513,11 @@ const AdminDashboard = ({ onLogout }) => {
                       <YAxis />
                       <Tooltip />
                       <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="price" 
-                        stroke="#8884d8" 
-                        activeDot={{ r: 8 }} 
+                      <Line
+                        type="monotone"
+                        dataKey="price"
+                        stroke="#8884d8"
+                        activeDot={{ r: 8 }}
                       />
                     </LineChart>
                   </ResponsiveContainer>
@@ -538,7 +538,7 @@ const AdminDashboard = ({ onLogout }) => {
                       {!isMobile && <TableCell><b>Location</b></TableCell>}
                       <TableCell><b>Price</b></TableCell>
                       {!isMobile && <TableCell><b>Type</b></TableCell>}
-                    
+
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -561,9 +561,9 @@ const AdminDashboard = ({ onLogout }) => {
                         {!isMobile && renderTableCell("Type", property.propertyType, isMobile)}
                         <TableCell>
                           <Box sx={{ display: "flex", flexDirection: isMobile ? "column" : "row", gap: 1 }}>
-                            <Button 
-                              variant="contained" 
-                              color="error" 
+                            <Button
+                              variant="contained"
+                              color="error"
                               size="small"
                               onClick={() => {
                                 setPropertyToDelete(property.id);
@@ -572,7 +572,7 @@ const AdminDashboard = ({ onLogout }) => {
                             >
                               Delete
                             </Button>
-                            
+
                           </Box>
                         </TableCell>
                       </TableRow>
@@ -608,9 +608,9 @@ const AdminDashboard = ({ onLogout }) => {
                             {user.name.charAt(0).toUpperCase()}
                           </Avatar>
                         </ListItemAvatar>
-                        <ListItemText 
-                          primary={user.name} 
-                          secondary={user.role} 
+                        <ListItemText
+                          primary={user.name}
+                          secondary={user.role}
                         />
                       </ListItem>
                     ))}
@@ -642,8 +642,8 @@ const AdminDashboard = ({ onLogout }) => {
                             <Box
                               sx={{
                                 maxWidth: "80%",
-                                bgcolor: message.senderId === "admin" ? 
-                                  theme.palette.primary.light : 
+                                bgcolor: message.senderId === "admin" ?
+                                  theme.palette.primary.light :
                                   theme.palette.grey[200],
                                 p: 1.5,
                                 borderRadius: 2,
@@ -685,10 +685,10 @@ const AdminDashboard = ({ onLogout }) => {
                       </Box>
                     </>
                   ) : (
-                    <Box sx={{ 
-                      display: "flex", 
-                      justifyContent: "center", 
-                      alignItems: "center", 
+                    <Box sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                       height: "100%",
                       textAlign: "center"
                     }}>
@@ -708,9 +708,9 @@ const AdminDashboard = ({ onLogout }) => {
               To-Do List
             </Typography>
             <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
-              <Box sx={{ 
-                display: "flex", 
-                gap: 1, 
+              <Box sx={{
+                display: "flex",
+                gap: 1,
                 mb: 2,
                 flexDirection: isMobile ? "column" : "row"
               }}>
@@ -730,10 +730,10 @@ const AdminDashboard = ({ onLogout }) => {
                   sx={{ minWidth: isMobile ? "100%" : 200 }}
                   size="small"
                 />
-                <Button 
-                  variant="contained" 
-                  color="primary" 
-                  onClick={handleAddTodo} 
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleAddTodo}
                   disabled={!newTodo || !todoDate}
                   sx={{ minWidth: isMobile ? "100%" : 100 }}
                 >
@@ -745,9 +745,9 @@ const AdminDashboard = ({ onLogout }) => {
                   <ListItem
                     key={todo.id}
                     secondaryAction={
-                      <Button 
-                        variant="outlined" 
-                        color="error" 
+                      <Button
+                        variant="outlined"
+                        color="error"
                         size="small"
                         onClick={() => handleDeleteTodo(todo.id)}
                       >
@@ -755,9 +755,9 @@ const AdminDashboard = ({ onLogout }) => {
                       </Button>
                     }
                   >
-                    <ListItemText 
-                      primary={todo.task} 
-                      secondary={new Date(todo.date).toLocaleString()} 
+                    <ListItemText
+                      primary={todo.task}
+                      secondary={new Date(todo.date).toLocaleString()}
                     />
                   </ListItem>
                 ))}
@@ -783,8 +783,8 @@ const AdminDashboard = ({ onLogout }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteDialogOpen(false)}>Cancel</Button>
-          <Button 
-            onClick={() => handleDeleteProperty(propertyToDelete)} 
+          <Button
+            onClick={() => handleDeleteProperty(propertyToDelete)}
             color="error"
           >
             Delete

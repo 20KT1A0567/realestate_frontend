@@ -15,7 +15,7 @@ const Register = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -49,7 +49,7 @@ const Register = () => {
     if (!isFormValid) return;
 
     try {
-      const response = await fetch("https://demo-deployment1-3-rxm7.onrender.com/auth/register", {
+      const response = await fetch("https://demo-deployment3-86e1.onrender.com/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const Register = () => {
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");
     }
-  
+
 
   };
 

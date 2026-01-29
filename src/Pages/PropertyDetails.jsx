@@ -43,16 +43,16 @@ const PropertyDetails = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const token = localStorage.getItem("token");
         if (!token) throw new Error("User not authenticated. Please log in.");
 
         // Fetch property details
         const propertyResponse = await fetch(
-          `https://demo-deployment1-3-rxm7.onrender.com/api/properties/${id}`,
+          `https://demo-deployment3-86e1.onrender.com/api/properties/${id}`,
           {
             method: "GET",
-            headers: { 
+            headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'application/json'
             },
@@ -99,7 +99,7 @@ const PropertyDetails = () => {
             'User-Agent': 'PropertyApp/1.0', // Nominatim requires user agent
           },
         });
-        
+
         clearTimeout(timeoutId);
 
         if (!geocodeResponse.ok) {
@@ -110,9 +110,9 @@ const PropertyDetails = () => {
 
         if (geocodeData.length > 0) {
           const { lat, lon } = geocodeData[0];
-          setCoordinates({ 
-            lat: parseFloat(lat), 
-            lon: parseFloat(lon) 
+          setCoordinates({
+            lat: parseFloat(lat),
+            lon: parseFloat(lon)
           });
         } else {
           console.warn("Could not find the location on the map:", location);
@@ -145,7 +145,7 @@ const PropertyDetails = () => {
       };
 
       const response = await fetch(
-        "https://demo-deployment1-3-rxm7.onrender.com/ratings",
+        "https://demo-deployment3-86e1.onrender.com/ratings",
         {
           method: "POST",
           headers: {
@@ -231,9 +231,9 @@ const PropertyDetails = () => {
     <Container sx={{ py: 4, mt: 8, mb: 4 }}>
       {/* Error Alert */}
       {error && (
-        <Alert 
-          severity="error" 
-          sx={{ mb: 2 }} 
+        <Alert
+          severity="error"
+          sx={{ mb: 2 }}
           onClose={() => setError(null)}
         >
           {error}
@@ -248,8 +248,8 @@ const PropertyDetails = () => {
             height="400"
             image={property.imageUrls?.[0] || "/default-property-image.jpg"}
             alt={property.propertyTitle}
-            sx={{ 
-              objectFit: "cover", 
+            sx={{
+              objectFit: "cover",
               borderRadius: 2,
               width: '100%'
             }}
@@ -269,11 +269,11 @@ const PropertyDetails = () => {
 
             {/* Display Current Rating */}
             <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-              <Rating 
-                name="property-rating" 
-                value={rating} 
-                precision={0.5} 
-                readOnly 
+              <Rating
+                name="property-rating"
+                value={rating}
+                precision={0.5}
+                readOnly
               />
               <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
                 ({rating.toFixed(1)}/5)
@@ -320,9 +320,9 @@ const PropertyDetails = () => {
                   </Typography>
                   {property.discountPercent > 0 && (
                     <>
-                      <Typography 
-                        variant="body1" 
-                        color="text.secondary" 
+                      <Typography
+                        variant="body1"
+                        color="text.secondary"
                         sx={{ textDecoration: 'line-through' }}
                       >
                         ₹{property.price.toLocaleString("en-IN")}
@@ -420,11 +420,11 @@ const PropertyDetails = () => {
             </Marker>
           </MapContainer>
         ) : (
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              justifyContent: 'center', 
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               height: '100%',
               bgcolor: 'background.default',
               color: 'text.secondary'

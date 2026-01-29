@@ -4,7 +4,7 @@ import { Button, TextField, Typography, Box, Paper, CircularProgress } from "@mu
 
 const loginUser = async (email, password) => {
   try {
-    const response = await fetch("https://demo-deployment1-3-rxm7.onrender.com/auth/login", {
+    const response = await fetch("https://demo-deployment3-86e1.onrender.com/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -116,6 +116,7 @@ const Login = ({ onLogin }) => {
         </Typography>
         <Typography align="center" sx={{ mt: 2 }}>
           <Link to="/forgot-password">Forgot Password?</Link>
+          <Link to="//reset-password">Reset Password?</Link>
         </Typography>
       </Paper>
     </Box>
