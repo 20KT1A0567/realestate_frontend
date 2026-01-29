@@ -49,7 +49,7 @@ const PropertyDetails = () => {
 
         // Fetch property details
         const propertyResponse = await fetch(
-          `https://demo-deployment3-86e1.onrender.com/api/properties/${id}`,
+          `https://demo-deployment3-1.onrender.com/api/properties/${id}`,
           {
             method: "GET",
             headers: {
@@ -145,7 +145,7 @@ const PropertyDetails = () => {
       };
 
       const response = await fetch(
-        "https://demo-deployment3-86e1.onrender.com/ratings",
+        "https://demo-deployment3-1.onrender.com/ratings",
         {
           method: "POST",
           headers: {

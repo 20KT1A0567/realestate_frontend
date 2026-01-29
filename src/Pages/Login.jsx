@@ -4,7 +4,7 @@ import { Button, TextField, Typography, Box, Paper, CircularProgress } from "@mu
 
 const loginUser = async (email, password) => {
   try {
-    const response = await fetch("https://demo-deployment3-86e1.onrender.com/auth/login", {
+    const response = await fetch("https://demo-deployment3-1.onrender.com/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

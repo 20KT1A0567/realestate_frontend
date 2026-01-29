@@ -33,7 +33,7 @@ const ResetPassword = () => {
 
     try {
       const response = await fetch(
-        `https://demo-deployment3-86e1.onrender.com/auth/reset-password?email=${email}&otp=${otp}&newPassword=${newPassword}`,
+        `https://demo-deployment3-1.onrender.com/auth/reset-password?email=${email}&otp=${otp}&newPassword=${newPassword}`,
         { method: "POST" }
       );
 

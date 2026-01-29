@@ -79,7 +79,7 @@ const useFetchProperties = (type) => {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("User not authenticated. Please log in.");
 
-      const response = await fetch(`https://demo-deployment3-86e1.onrender.com/api/properties/type/${type}`, {
+      const response = await fetch(`https://demo-deployment3-1.onrender.com/api/properties/type/${type}`, {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
       });
